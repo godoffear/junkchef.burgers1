@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="app-version" content="1.0.0">
+<meta name="theme-color" content="#b84d1f">
+<meta name="color-scheme" content="light dark">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Burger Shop</title>
+<style>
+:root{color-scheme:light;--bg:#f7f0e6;--card:#fffaf3;--card2:#f0e6d8;--tx:#2b2119;--mut:#6b5a4c;--ac:#b84d1f;--acx:#fff;--ln:#e0d2bf;--ok:#1f7a2e;--wa:#9a6200;--er:#b3261e;--in:#1d5aa6;--okb:#e0f2e1;--wab:#fbefcf;--erb:#fbe0dd;--inb:#dde9f8}
+:root[data-theme=dark]{color-scheme:dark;--bg:#17120e;--card:#241d17;--card2:#2f261e;--tx:#f4eadc;--mut:#b9a998;--ac:#e8825a;--acx:#1b0f08;--ln:#43372b;--ok:#79d17f;--wa:#ecc062;--er:#ff8a80;--in:#7db4f2;--okb:#1d3320;--wab:#3a2e12;--erb:#432120;--inb:#18304c}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--bg:#17120e;--card:#241d17;--card2:#2f261e;--tx:#f4eadc;--mut:#b9a998;--ac:#e8825a;--acx:#1b0f08;--ln:#43372b;--ok:#79d17f;--wa:#ecc062;--er:#ff8a80;--in:#7db4f2;--okb:#1d3320;--wab:#3a2e12;--erb:#432120;--inb:#18304c}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{zoom:.92}
+body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.35 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+button,input,select,textarea{font:inherit;color:inherit}
+button{min-height:44px;border:1px solid var(--ln);background:var(--card);border-radius:10px;padding:0 12px;cursor:pointer;font-weight:600}
+button:active{transform:scale(.98)}
+button.pri{background:var(--ac);color:var(--acx);border-color:var(--ac)}
+button.ok{background:var(--ok);color:var(--bg);border-color:var(--ok)}
+button.dng{color:var(--er);border-color:var(--er)}
+button.sm{min-height:44px;padding:0 10px}
+button[disabled]{opacity:.45;cursor:default}
+input,select,textarea{min-height:44px;width:100%;border:1px solid var(--ln);background:var(--card);border-radius:10px;padding:6px 10px}
+input::placeholder,textarea::placeholder{color:var(--mut);opacity:.9}
+textarea{min-height:64px}
+label.f{display:block;font-size:12px;color:var(--mut);font-weight:600}
+label.f input,label.f select{margin-top:2px;color:var(--tx);font-weight:400;font-size:14px}
+header{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--ln);padding:8px 12px;padding-top:calc(8px + env(safe-area-inset-top));display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.brand{font-weight:800;font-size:17px}
+.hr{display:flex;align-items:center;gap:8px}.hr small{color:var(--mut);font-size:12px}
+.m{white-space:nowrap}
+.sum{font-weight:800;color:var(--ac);font-size:16px}
+main{max-width:1100px;margin:0 auto;padding:10px 12px}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:12px;padding:10px;margin-bottom:10px}
+h2{font-size:16px;margin:14px 0 6px}h3{font-size:14px;margin:12px 0 6px}
+.muted{color:var(--mut);font-size:12px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.sp{justify-content:space-between}.grow{flex:1;min-width:0}
+.seg{display:flex;gap:6px;margin:0 0 10px;flex-wrap:wrap}.seg button{flex:1;min-width:0;padding:0 6px;font-size:13px}
+.seg button.on{background:var(--ac);color:var(--acx);border-color:var(--ac)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.chips button{min-height:44px;border-radius:22px;font-size:13px;padding:0 12px;white-space:nowrap}
+.chips button.on{background:var(--ac);color:var(--acx);border-color:var(--ac)}
+.cnt{display:inline-block;min-width:20px;padding:0 6px;border-radius:10px;background:var(--card2);font-size:12px;margin-left:4px}
+.on .cnt{background:rgba(255,255,255,.28)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.tile{position:relative;background:var(--card);border:1px solid var(--ln);border-radius:12px;padding:10px 6px;text-align:center;min-height:96px;cursor:pointer;user-select:none}
+.tile .em{font-size:30px;display:block}.tile .nm{font-size:13px;display:block;font-weight:600}.tile .pr{color:var(--ac);font-weight:800;font-size:13px}
+.tile.off{opacity:.45;cursor:default}
+.tile .bd{position:absolute;top:4px;right:4px;background:var(--ac);color:var(--acx);border-radius:12px;min-width:24px;height:24px;line-height:24px;font-size:13px;font-weight:700}
+.tile .mn{position:absolute;top:0;left:0;width:44px;min-height:44px;border:0;background:transparent;font-size:20px;color:var(--er)}
+.cartbar{position:sticky;bottom:calc(66px + env(safe-area-inset-bottom));margin-top:10px;z-index:10}
+.cartbar button{width:100%;min-height:52px;display:flex;justify-content:space-between;padding:0 16px;font-size:15px}
+.ord{border-left:6px solid var(--in)}.ord.cook{border-left-color:var(--wa)}.ord.ready{border-left-color:var(--ok)}.ord.late{background:var(--erb)}
+.badge{display:inline-block;border-radius:10px;padding:2px 8px;font-size:12px;font-weight:700;white-space:nowrap}
+.b-ok{background:var(--okb);color:var(--ok)}.b-wa{background:var(--wab);color:var(--wa)}.b-er{background:var(--erb);color:var(--er)}.b-in{background:var(--inb);color:var(--in)}.b-gr{background:var(--card2);color:var(--mut)}
+.kpi{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.kpi>div{background:var(--card);border:1px solid var(--ln);border-radius:12px;padding:10px}.kpi small{color:var(--mut);font-size:12px;display:block}.kpi b{font-size:17px;white-space:nowrap}
+.bar{height:10px;background:var(--card2);border-radius:5px;overflow:hidden}.bar i{display:block;height:100%;background:var(--ac)}
+.bar.ok i{background:var(--ok)}.bar.wa i{background:var(--wa)}.bar.er i{background:var(--er)}
+.chart{display:flex;align-items:flex-end;gap:2px;height:110px;padding:6px;background:var(--card);border:1px solid var(--ln);border-radius:12px}
+.chart i{flex:1;background:var(--ac);border-radius:3px 3px 0 0;min-height:2px}.chart i.we{background:var(--in)}
+.step{display:flex;align-items:center;gap:6px}.step button{width:44px;padding:0;font-size:20px}.step b{min-width:54px;text-align:center}
+table{width:100%;border-collapse:collapse;font-size:12px}td,th{padding:5px 4px;border-bottom:1px solid var(--ln);text-align:right}td:first-child,th:first-child{text-align:left}
+.heat{display:grid;grid-template-columns:28px repeat(14,1fr);gap:2px;font-size:10px;color:var(--mut)}
+.heat div{height:26px;border-radius:4px;display:flex;align-items:center;justify-content:center}
+.heat .c{background:color-mix(in srgb,var(--ac) calc(var(--p)*1%),var(--card2));color:var(--tx)}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--card);border-top:1px solid var(--ln);display:flex;padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;border:0;border-radius:0;background:transparent;min-height:58px;font-size:11px;position:relative;color:var(--mut);padding:0 2px}
+nav button b{display:block;font-size:20px;line-height:1.1}nav button.on{color:var(--ac)}
+nav .nb{position:absolute;top:4px;left:50%;margin-left:6px;background:var(--er);color:#fff;border-radius:9px;font-size:11px;min-width:18px;height:18px;line-height:18px}
+#toast{position:fixed;left:12px;right:12px;bottom:calc(70px + env(safe-area-inset-bottom));z-index:60;background:var(--tx);color:var(--bg);border-radius:12px;padding:6px 8px 6px 14px;display:none;align-items:center;justify-content:space-between;gap:8px;max-width:520px;margin:0 auto}
+#toast.show{display:flex}#toast button{background:transparent;color:var(--bg);border-color:var(--bg)}
+#sheet{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.5);display:none;align-items:flex-end;justify-content:center}
+#sheet.show{display:flex}
+.sh{background:var(--bg);width:100%;max-width:640px;max-height:92vh;overflow:auto;border-radius:18px 18px 0 0;padding:14px 12px calc(14px + env(safe-area-inset-bottom))}
+.ing{border:1px solid var(--ln);border-radius:10px;padding:8px;margin-bottom:8px;background:var(--card)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:6px}.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+details>summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:700}
+.two{display:block}.two .col+.col{margin-top:0}
+.sub-only{display:block}
+@media (min-width:860px){.two{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}.sub-only{display:none}.cartbar{bottom:12px}#toast{bottom:12px}.tiles{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}}
+</style>
+</head>
+<body>
+<header><div class="brand">🍔 Burger Shop</div><div class="hr"><small>Сегодня</small><span class="sum" id="hsum"></span><button id="thm" class="sm" data-a="theme" aria-label="Тема">🌙</button></div></header>
+<main id="main"></main>
+<div id="toast"><span id="tmsg"></span><button id="tund">Отменить</button></div>
+<div id="sheet"><div class="sh" id="shc"></div></div>
+<nav id="nav"></nav>
+
+<script>
+'use strict';
+/* ===== утилиты ===== */
+const KEY='burger-app-v2',DAY=864e5;
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const nf=new Intl.NumberFormat('ru-RU');
+const mt=n=>nf.format(Math.round(n||0))+' ₫';
+const money=n=>'<span class="m">'+mt(n)+'</span>';
+const q2=n=>String(+(+n||0).toFixed(2)).replace('.',',');
+const startDay=t=>{const d=new Date(t);d.setHours(0,0,0,0);return d.getTime()};
+const endDay=t=>startDay(t)+DAY-1;
+const dd=t=>{const d=new Date(t);return String(d.getDate()).padStart(2,'0')+'.'+String(d.getMonth()+1).padStart(2,'0')};
+const hm=t=>{const d=new Date(t);return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')};
+const isoDay=t=>{const d=new Date(t);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const sum=(a,f)=>a.reduce((s,x)=>s+(+f(x)||0),0);
+
+/* ===== данные ===== */
+const DEFCATS=[{id:'food',em:'🥩',name:'Продукты'},{id:'chem',em:'🧴',name:'Бытовая химия'},{id:'pack',em:'📦',name:'Упаковка'},{id:'cons',em:'🧻',name:'Расходники'},{id:'other',em:'🔧',name:'Прочее'}];
+const OPEX=['Аренда','Зарплата','Коммунальные','Реклама','Связь','Оборудование','Налоги','Прочее'];
+const PURCH=['Закупка продуктов','Закупка упаковки и химии'];
+const INCAT=['Взнос в кассу','Прочий приход'];
+const REASONS=['Порча','Брак','Угощение','Пролив','Срок годности','Другое'];
+const ST=['new','cook','ready','sold'];
+const STN={new:'Новый',cook:'Готовится',ready:'Готов',sold:'Продан'};
+const NEXT={new:'Начать готовить',cook:'Готов',ready:'Продан'};
+function blank(){return{menu:[
+ {id:1,em:'🍔',name:'Классический',price:85000,cost:30000,on:true},
+ {id:2,em:'🍟',name:'Картофель фри',price:45000,cost:12000,on:true},
+ {id:3,em:'🥤',name:'Кола 0,33',price:25000,cost:9000,on:true}],
+ cats:DEFCATS.map(c=>({...c})),stock:[],preps:[],orders:[],fin:[],losses:[],shifts:[],
+ seq:{menu:4,stock:1,order:1,prep:1,fin:1,cat:100,loss:1,shift:1}}}
+function norm(s){const d=blank();s=Object.assign(d,s||{});
+ ['menu','stock','preps','orders','fin','losses','shifts'].forEach(k=>{if(!Array.isArray(s[k]))s[k]=[]});
+ if(!Array.isArray(s.cats)||!s.cats.length)s.cats=DEFCATS.map(c=>({...c}));
+ s.seq=Object.assign({menu:1,stock:1,order:1,prep:1,fin:1,cat:100,loss:1,shift:1},s.seq||{});
+ s.menu.forEach(m=>{m.tc=m.tc||{time:0,steps:'',ings:[]};m.tc.ings=m.tc.ings||[];m.pack=m.pack||[];m.on=m.on!==false;m.cost=+m.cost||0;m.price=+m.price||0;m.em=m.em||'🍽️'});
+ s.stock.forEach(i=>{i.cat=i.cat||'food';i.price=+i.price||0;i.min=+i.min||0;i.qty=+i.qty||0});
+ s.preps.forEach(p=>{p.qty=+p.qty||0;p.par=+p.par||0;p.batch=+p.batch||1;p.shelf=+p.shelf||1;p.exp=p.exp||null});
+ s.orders.forEach(o=>{o.deducted=o.deducted||[];o.pay=o.pay||'cash';o.items=o.items||[]});
+ return s}
+function load(){try{const r=localStorage.getItem(KEY);if(r)return norm(JSON.parse(r))}catch(e){}return norm(blank())}
+let S=load();
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const ui={tab:'orders',osub:'new',of:'all',cart:{},ck:{client:'',type:'here',note:'',pay:'cash'},sheet:null,
+ sr:'today',ssub:'sales',fr:'week',hr:'month',mmode:'dishes',scat:'all',ff:{type:'out',cat:OPEX[0],sum:'',note:''},
+ sh:{float:'',counted:'',note:''},ns:{name:'',qty:'',unit:'шт',min:'',cat:'food',price:''},np:{name:'',par:'',batch:'',shelf:''},nd:{em:'🍽️',name:'',price:''},resetArm:false};
+
+/* ===== расчёты ===== */
+function calcTC(tc){let out=0,cost=0,k=0,p=0,f=0,c=0;
+ for(const i of (tc&&tc.ings)||[]){const q=+i.qty||0,pc=+i.price||0;let mass,m;
+  if(i.unit==='шт'){mass=q*(+i.w||0);cost+=q*pc;m=q}else{mass=q;cost+=q/1000*pc;m=q/100}
+  k+=m*(+i.kcal||0);p+=m*(+i.p||0);f+=m*(+i.f||0);c+=m*(+i.c||0);out+=mass}
+ return{out,cost,k,p,f,c,k100:out?k/out*100:0,p100:out?p/out*100:0,f100:out?f/out*100:0,c100:out?c/out*100:0}}
+const stockBy=id=>S.stock.find(x=>x.id===id);
+const packCost=m=>sum(m.pack||[],x=>{const s=stockBy(x.stockId);return s?s.price*x.qty:0});
+const hasTC=m=>m.tc&&m.tc.ings&&m.tc.ings.length>0;
+const dishCost=m=>(hasTC(m)?calcTC(m.tc).cost:m.cost)+packCost(m);
+const stepOf=u=>u==='шт'?10:(u==='кг'||u==='л')?.5:1;
+const isLow=i=>i.qty<i.min;
+function need(i){const n=Math.max(0,i.min*2-i.qty);return i.unit==='шт'?Math.ceil(n):Math.ceil(n*2)/2}
+function amountFor(ing,qty){return ing.unit==='шт'?qty:qty/1000}
+function deductFor(o){const map={};
+ for(const it of o.items){const m=S.menu.find(x=>x.id===it.id);if(!m)continue;
+  for(const g of m.tc.ings||[])if(g.stockId){map[g.stockId]=(map[g.stockId]||0)+amountFor(g,+g.qty||0)*it.qty}
+  for(const k of m.pack||[])if(k.stockId&&(k.mode==='all'||o.type==='go'))map[k.stockId]=(map[k.stockId]||0)+(+k.qty||0)*it.qty}
+ const out=[];for(const id in map){const s=stockBy(+id);if(!s)continue;const a=Math.min(s.qty,map[id]);if(a>0){s.qty=+(s.qty-a).toFixed(4);out.push([s.id,a])}}
+ return out}
+function restore(o){for(const[id,a]of o.deducted||[]){const s=stockBy(id);if(s)s.qty=+(s.qty+a).toFixed(4)}o.deducted=[]}
+const sold=()=>S.orders.filter(o=>o.status==='sold');
+const oTotal=o=>sum(o.items,i=>i.price*i.qty);
+const oCost=o=>sum(o.items,i=>i.cost*i.qty);
+function rangeStart(r){const n=Date.now();return r==='today'?startDay(n):r==='week'?startDay(n)-6*DAY:r==='month'?startDay(n)-29*DAY:0}
+const inRange=(arr,f,r)=>{const s=rangeStart(r);return arr.filter(x=>f(x)>=s)};
+function prepState(p){
+ if(p.qty<=0)return{o:4,t:'Нет в запасе',c:'b-gr'};
+ if(!p.exp)return{o:3,t:'Срок не задан',c:'b-gr'};
+ const d=Math.round((startDay(p.exp)-startDay(Date.now()))/DAY);
+ if(d<0)return{o:0,t:'Просрочено',c:'b-er'};
+ if(d===0)return{o:1,t:'Истекает сегодня',c:'b-er'};
+ if(d===1)return{o:2,t:'Истекает завтра',c:'b-wa'};
+ return{o:3,t:'Годно до '+dd(p.exp),c:'b-ok'}}
+const prepStep=p=>(p.unit==='кг'||p.unit==='л')?.5:1;
+const prepUrgent=p=>p.qty>0&&p.exp&&prepState(p).o<=2;
+
+/* ===== откат и уведомления ===== */
+let tmr=null,undoSnap=null;
+function toast(msg,snap){$('#tmsg').textContent=msg;undoSnap=snap||null;$('#tund').style.display=snap?'':'none';$('#toast').classList.add('show');clearTimeout(tmr);tmr=setTimeout(()=>$('#toast').classList.remove('show'),5000)}
+$('#tund').onclick=()=>{if(!undoSnap)return;S=norm(JSON.parse(undoSnap));undoSnap=null;save();$('#toast').classList.remove('show');render()};
+function act(msg,fn){const snap=JSON.stringify(S);fn();save();render();toast(msg,snap)}
+function quiet(fn){fn();save();render()}
+
+/* ===== демо-данные ===== */
+function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function demo(){
+ const R=mulberry(20240607),now=Date.now(),T0=startDay(now);
+ const s=blank();s.menu=[];s.seq={menu:1,stock:1,order:1,prep:1,fin:1,cat:100,loss:1,shift:1};
+ const SK=[ // name,cat,qty,unit,min,price
+ ['Говяжий фарш','food',6,'кг',8,220000],['Булочки','food',80,'шт',60,6000],['Сыр чеддер','food',1.5,'кг',2,280000],['Бекон','food',2,'кг',1.5,260000],
+ ['Куриное филе','food',4,'кг',3,120000],['Картофель','food',15,'кг',10,25000],['Салат','food',2,'кг',1,40000],['Помидоры','food',3,'кг',2,35000],
+ ['Лук','food',2,'кг',1,20000],['Соус фирменный','food',3,'л',2,90000],['Масло для фритюра','food',8,'л',10,50000],['Кола 0,33','food',48,'шт',24,9000],
+ ['Средство для посуды','chem',4,'л',3,60000],['Дезинфектор','chem',1,'л',2,120000],['Мыло для рук','chem',2,'л',1,80000],['Мусорные пакеты','chem',3,'уп',2,45000],
+ ['Коробка для бургера','pack',120,'шт',200,3500],['Бумага для обёртки','pack',400,'шт',200,500],['Контейнер для фри','pack',90,'шт',100,2000],['Пакет с ручками','pack',300,'шт',150,1500],
+ ['Салфетки','cons',900,'шт',500,100],['Перчатки','cons',5,'уп',3,80000],['Приборы (набор)','cons',250,'шт',150,1200]];
+ SK.forEach(a=>s.stock.push({id:s.seq.stock++,name:a[0],cat:a[1],qty:a[2],unit:a[3],min:a[4],price:a[5]}));
+ const sid=n=>s.stock.find(x=>x.name===n).id;
+ const TP={ // name,unit,kcal,p,f,c,price,stock,w
+  bun:['Булочка','шт',250,8,4,45,6000,'Булочки',70],beef:['Котлета говяжья','г',250,17,20,0,220000,'Говяжий фарш'],
+  cheese:['Сыр чеддер','г',400,25,33,1,280000,'Сыр чеддер'],bacon:['Бекон','г',540,37,42,1.4,260000,'Бекон'],
+  chick:['Куриное филе','г',165,31,3.6,0,120000,'Куриное филе'],lett:['Салат','г',15,1.4,.2,2.9,40000,'Салат'],
+  tom:['Помидор','г',18,.9,.2,3.9,35000,'Помидоры'],onion:['Лук','г',40,1.1,.1,9.3,20000,'Лук'],
+  sauce:['Соус','мл',320,1,32,6,90000,'Соус фирменный'],pot:['Картофель','г',77,2,.1,17,25000,'Картофель'],
+  oil:['Масло фритюр','мл',884,0,100,0,50000,'Масло для фритюра'],cola:['Кола 0,33','шт',139,0,0,35,9000,'Кола 0,33',330]};
+ const ing=(k,q)=>{const t=TP[k];return{name:t[0],qty:q,unit:t[1],kcal:t[2],p:t[3],f:t[4],c:t[5],price:t[6],stockId:sid(t[7]),w:t[8]||0}};
+ const BP=[{n:'Коробка для бургера',q:1,m:'go'},{n:'Бумага для обёртки',q:1,m:'all'},{n:'Салфетки',q:2,m:'all'}];
+ const DS=[
+  ['🍔','Классический',85000,[['bun',1],['beef',100],['lett',20],['tom',30],['onion',10],['sauce',20]],BP,8,'Обжарить котлету 3–4 мин с каждой стороны, собрать бургер.'],
+  ['🍔','Двойной',120000,[['bun',1],['beef',200],['cheese',20],['lett',20],['tom',30],['sauce',25]],BP,10,'Две котлеты, сыр плавим на второй.'],
+  ['🥗','Овощной',75000,[['bun',1],['lett',40],['tom',50],['onion',20],['cheese',20],['sauce',25]],BP,6,'Овощи свежие, булочку подогреть.'],
+  ['🍟','Картофель фри',45000,[['pot',150],['oil',30]],[{n:'Контейнер для фри',q:1,m:'all'},{n:'Салфетки',q:1,m:'all'}],7,'Фритюр 180°C, 4–5 минут.'],
+  ['🧀','Чизбургер',95000,[['bun',1],['beef',100],['cheese',30],['lett',15],['onion',10],['sauce',20]],BP,8,'Сыр кладём на горячую котлету.'],
+  ['🥓','Бекон-бургер',110000,[['bun',1],['beef',100],['bacon',30],['cheese',20],['lett',15],['sauce',20]],BP,9,'Бекон хрустящий, 2 минуты на гриле.'],
+  ['🐔','Чикен-бургер',90000,[['bun',1],['chick',120],['lett',20],['tom',30],['sauce',25]],BP,9,'Филе в панировке, жарить до золотистого цвета.'],
+  ['🥤','Кола 0,33',25000,[['cola',1]],[],0,'Подать охлаждённой.']];
+ DS.forEach(d=>{const m={id:s.seq.menu++,em:d[0],name:d[1],price:d[2],cost:0,on:true,tc:{time:d[5],steps:d[6],ings:d[3].map(x=>ing(x[0],x[1]))},pack:d[4].map(p=>({stockId:sid(p.n),qty:p.q,mode:p.m}))};s.menu.push(m)});
+ const pd=(n,par,b,sh,q,days)=>({id:s.seq.prep++,name:n,qty:q,unit:'порц',par:par,batch:b,shelf:sh,exp:days==null?null:endDay(now+days*DAY)});
+ s.preps=[pd('Котлеты сформованные',30,20,2,12,-1),pd('Нарезанные овощи',6,3,1,2,0),pd('Соус фирменный',4,2,3,3,1),pd('Булочки подготовленные',40,20,2,35,1),pd('Маринованный лук',3,2,7,2,5),pd('Бекон нарезанный',2,1,3,0,null),pd('Куриное филе в панировке',16,8,2,10,2)];
+ s.preps[0].unit='шт';s.preps[1].unit='кг';s.preps[2].unit='л';s.preps[3].unit='шт';s.preps[4].unit='кг';s.preps[5].unit='кг';s.preps[6].unit='шт';
+ // история 30 дней
+ const names=['Линь','Хоа','Минь','Анна','Дмитрий','Тху','Сергей','Нгок','Мария','Алексей','Фуонг','Иван','Хунг','Ольга','Ань'];
+ const wts=[28,18,6,16,12,9,8,12];const wsum=sum(wts,x=>x);
+ const hw={9:1,10:2,11:5,12:11,13:10,14:5,15:2,16:2,17:4,18:9,19:11,20:9,21:5,22:2};
+ const hkeys=Object.keys(hw).map(Number),hs=sum(hkeys,h=>hw[h]);
+ let num=1;
+ for(let d=30;d>=1;d--){const day=T0-d*DAY,wd=(new Date(day).getDay()+6)%7;const base=wd>=5?26:14;const n=Math.round(base*(.8+R()*.4));
+  const tss=[];for(let i=0;i<n;i++){let r=R()*hs,h=12;for(const k of hkeys){r-=hw[k];if(r<=0){h=k;break}}tss.push(day+h*3600e3+Math.floor(R()*60)*60e3)}
+  tss.sort((a,b)=>a-b);
+  for(const ts of tss){const cnt=1+Math.floor(R()*3);const items=[];
+   for(let j=0;j<cnt;j++){let r=R()*wsum,k=0;for(;k<wts.length;k++){r-=wts[k];if(r<=0)break}const m=s.menu[Math.min(k,7)];const e=items.find(x=>x.id===m.id);if(e)e.qty++;else items.push({id:m.id,name:m.name,price:m.price,cost:dishCostS(m,s),qty:1})}
+   const go=R()<.4;
+   s.orders.push({num:num++,client:R()<.35?'Стол '+(1+Math.floor(R()*8)):names[Math.floor(R()*names.length)],type:go?'go':'here',pay:R()<.55?'cash':'card',note:R()<.15?['Без лука','Без соуса','Поострее','Побольше сыра'][Math.floor(R()*4)]:'',status:'sold',items,created:ts,sold:ts+(8+Math.floor(R()*12))*60e3,deducted:[]})}}
+ s.seq.order=num;
+ // финансы
+ let fid=1;const F=(d,type,cat,sumv,note,h)=>s.fin.push({id:fid++,ts:T0-d*DAY+(h||10)*3600e3,type,cat,note:note||'',sum:sumv});
+ F(30,'in','Взнос в кассу',20000000,'Стартовый взнос',9);F(28,'out','Аренда',15000000,'Аренда за месяц');F(20,'out','Зарплата',12000000,'Выплата 1');F(5,'out','Зарплата',12000000,'Выплата 2');
+ F(15,'out','Коммунальные',3200000,'Свет, вода');F(18,'out','Реклама',2500000,'Реклама в соцсетях');F(12,'out','Связь',400000,'Интернет');F(8,'out','Налоги',2000000,'Налоги');F(10,'out','Оборудование',1500000,'Ремонт гриля');F(14,'in','Прочий приход',1200000,'Праздничный заказ');
+ for(let d=30;d>=3;d-=3){const from=T0-d*DAY,to=from+3*DAY;const c=sum(s.orders.filter(o=>o.sold>=from&&o.sold<to),oCost);F(d,'out','Закупка продуктов',Math.round(c/1000)*1000,'Продукты',8)}
+ F(24,'out','Закупка упаковки и химии',1800000,'Коробки, салфетки',9);F(9,'out','Закупка упаковки и химии',1400000,'Химия и пакеты',9);
+ s.seq.fin=fid;
+ // потери
+ let lid=1;const L=(d,name,qty,unit,reason,sumv)=>s.losses.push({id:lid++,ts:T0-d*DAY+15*3600e3,name,qty,unit,reason,sum:sumv});
+ L(2,'Салат',1,'кг','Порча',40000);L(5,'Булочки',6,'шт','Брак',36000);L(9,'Соус фирменный',0.5,'л','Пролив',45000);L(13,'Говяжий фарш',1,'кг','Срок годности',220000);L(20,'Картофель',3,'кг','Порча',75000);
+ s.seq.loss=lid;
+ // закрытые смены за 5 дней
+ let sid2=1,prev=T0-5*DAY;
+ for(let d=5;d>=1;d--){const to=T0-d*DAY+23*3600e3;const os=s.orders.filter(o=>o.sold>=prev&&o.sold<to);
+  const cash=sum(os.filter(o=>o.pay==='cash'),oTotal),card=sum(os.filter(o=>o.pay==='card'),oTotal);const fl=500000;const diff=[0,0,-20000,0,10000][5-d];
+  s.shifts.push({id:sid2++,ts:to,from:prev,orders:os.length,cash,card,float:fl,expected:fl+cash,counted:fl+cash+diff,diff,note:diff?'Расхождение':''});prev=to}
+ s.seq.shift=sid2;
+ // живые заказы
+ const live=[['Стол 2','here','new',2,[1,4]],['Минь','go','new',1,[2]],['Анна','here','cook',9,[5,7]],['Стол 5','here','cook',22,[1,1,4]],['Хоа','go','ready',5,[6,8]],['Иван','go','ready',8,[3]]];
+ for(const l of live){const items=[];l[4].forEach(i=>{const m=s.menu[i-1],e=items.find(x=>x.id===m.id);if(e)e.qty++;else items.push({id:m.id,name:m.name,price:m.price,cost:dishCostS(m,s),qty:1})});
+  s.orders.push({num:num++,client:l[0],type:l[1],pay:'cash',note:'',status:l[2],items,created:now-l[3]*60e3,sold:null,deducted:[]})}
+ s.seq.order=num;
+ return norm(s)}
+function dishCostS(m,s){const pk=sum(m.pack||[],x=>{const st=s.stock.find(y=>y.id===x.stockId);return st?st.price*x.qty:0});return(m.tc&&m.tc.ings&&m.tc.ings.length?calcTC(m.tc).cost:m.cost)+pk}
+
+/* ===== отрисовка ===== */
+function counters(){return{orders:S.orders.filter(o=>o.status!=='sold').length,preps:S.preps.filter(prepUrgent).length+S.preps.filter(p=>p.qty<p.par&&!prepUrgent(p)).length,stock:S.stock.filter(isLow).length}}
+function renderNav(){const c=counters();const T=[['orders','🧾','Заказы',c.orders],['sales','📈','Продажи',0],['menu','📖','Меню',0],['preps','🥬','Заготовки',c.preps],['stock','📦','Склад',c.stock]];
+ $('#nav').innerHTML=T.map(t=>`<button data-a="tab" data-v="${t[0]}" class="${ui.tab===t[0]?'on':''}"><b>${t[1]}</b>${t[2]}${t[3]?`<span class="nb">${t[3]}</span>`:''}</button>`).join('')}
+function renderHead(){const t=startDay(Date.now());$('#hsum').innerHTML=money(sum(sold().filter(o=>o.sold>=t),oTotal));
+ const dark=document.documentElement.dataset.theme==='dark'||(!document.documentElement.dataset.theme&&matchMedia('(prefers-color-scheme:dark)').matches);$('#thm').textContent=dark?'☀️':'🌙'}
+function render(){const y=scrollY;renderHead();renderNav();
+ const V={orders:vOrders,sales:vSales,menu:vMenu,preps:vPreps,stock:vStock}[ui.tab];$('#main').innerHTML=V();renderSheet();scrollTo(0,y)}
+
+/* --- заказы --- */
+function cartSum(){let n=0,s=0;for(const id in ui.cart){const m=S.menu.find(x=>x.id===+id);if(m){n+=ui.cart[id];s+=m.price*ui.cart[id]}}return{n,s}}
+function vOrders(){const cs=cartSum();
+ const kassa=`<div class="col ${ui.osub==='new'?'':'hide-n'}"><h2>➕ Новый заказ</h2><div class="tiles">${S.menu.map(m=>{const q=ui.cart[m.id]||0;return`<div class="tile ${m.on?'':'off'}" data-a="add" data-id="${m.id}">${q?`<button class="mn" data-a="rem" data-id="${m.id}">−</button><span class="bd">${q}</span>`:''}<span class="em">${esc(m.em)}</span><span class="nm">${esc(m.name)}</span><span class="pr">${m.on?money(m.price):'Стоп-лист'}</span></div>`}).join('')}</div>
+ ${cs.n?`<div class="cartbar"><button class="pri" data-a="cart"><span>🛒 Корзина · ${cs.n} шт</span>${money(cs.s)}</button></div>`:''}</div>`;
+ const act2=S.orders.filter(o=>o.status!=='sold').sort((a,b)=>a.created-b.created);
+ const cnt=s=>act2.filter(o=>o.status===s).length;
+ const F=[['all','Все',act2.length],['new','Новые',cnt('new')],['cook','Готовятся',cnt('cook')],['ready','Готовы',cnt('ready')]];
+ const list=act2.filter(o=>ui.of==='all'||o.status===ui.of);
+ const queue=`<div class="col"><h2>🧾 Очередь</h2><div class="chips">${F.map(f=>`<button data-a="of" data-v="${f[0]}" class="${ui.of===f[0]?'on':''}">${f[1]}<span class="cnt">${f[2]}</span></button>`).join('')}</div>
+ ${list.length?list.map(oCard).join(''):'<div class="card muted">Заказов нет</div>'}</div>`;
+ const wide=innerWidth/(parseFloat(document.documentElement.style.zoom)||1)>=860||matchMedia('(min-width:860px)').matches;
+ const sw=`<div class="seg sub-only"><button class="${ui.osub==='new'?'on':''}" data-a="osub" data-v="new">➕ Новый заказ</button><button class="${ui.osub==='q'?'on':''}" data-a="osub" data-v="q">🧾 Очередь</button></div>`;
+ if(wide)return `<div class="two">${kassa}${queue}</div>`;
+ return sw+(ui.osub==='new'?kassa:queue)}
+function oCard(o){const age=Math.floor((Date.now()-o.created)/60000),late=age>15;
+ return `<div class="card ord ${o.status} ${late?'late':''}"><div class="row sp"><b>#${o.num} ${esc(o.client||'Без имени')}</b><span class="${late?'badge b-er':'muted'}">${age} мин назад</span></div>
+ <div class="row" style="margin:4px 0"><span class="badge ${o.status==='new'?'b-in':o.status==='cook'?'b-wa':'b-ok'}">${STN[o.status]}</span><span class="badge b-gr">${o.type==='go'?'С собой':'На месте'}</span><span class="badge b-gr">${o.pay==='card'?'Карта':'Нал'}</span></div>
+ <div>${o.items.map(i=>`${i.qty}× ${esc(i.name)}`).join(', ')}</div>${o.note?`<div class="muted">💬 ${esc(o.note)}</div>`:''}
+ <div class="row sp" style="margin-top:8px"><b>${money(oTotal(o))}</b><span class="row"><button class="pri" data-a="adv" data-id="${o.num}">${NEXT[o.status]}</button><button class="dng sm" data-a="ocancel" data-id="${o.num}" aria-label="Отменить заказ">✕</button></span></div></div>`}
+
+/* --- продажи --- */
+function vSales(){const T=[['sales','🧾 Продажи'],['fin','📊 Финансы'],['hours','⏰ Часы'],['shift','🔒 Смена']];
+ return `<div class="seg">${T.map(t=>`<button class="${ui.ssub===t[0]?'on':''}" data-a="ssub" data-v="${t[0]}">${t[1]}</button>`).join('')}</div>`+({sales:salesV,fin:finV,hours:hoursV,shift:shiftV}[ui.ssub])()}
+const chips=(cur,list,a)=>`<div class="chips">${list.map(r=>`<button class="${cur===r[0]?'on':''}" data-a="${a}" data-v="${r[0]}">${r[1]}</button>`).join('')}</div>`;
+function salesV(){const os=inRange(sold(),o=>o.sold,ui.sr),rev=sum(os,oTotal),cg=sum(os,oCost);
+ const top={};os.forEach(o=>o.items.forEach(i=>{top[i.name]=(top[i.name]||0)+i.qty}));const tl=Object.entries(top).sort((a,b)=>b[1]-a[1]).slice(0,8),mx=tl.length?tl[0][1]:1;
+ const hist=sold().sort((a,b)=>b.sold-a.sold).slice(0,20);
+ return chips(ui.sr,[['today','Сегодня'],['week','7 дней'],['all','Всё время']],'sr')+
+ `<div class="kpi"><div><small>Заказов</small><b>${os.length}</b></div><div><small>Выручка</small><b>${mt(rev)}</b></div><div><small>Средний чек</small><b>${mt(os.length?rev/os.length:0)}</b></div><div><small>Прибыль (оценка)</small><b>${mt(rev-cg)}</b></div></div>
+ <h2>Топ блюд</h2><div class="card">${tl.length?tl.map(t=>`<div style="margin-bottom:8px"><div class="row sp"><span>${esc(t[0])}</span><b>${t[1]} шт</b></div><div class="bar"><i style="width:${t[1]/mx*100}%"></i></div></div>`).join(''):'<span class="muted">Продаж пока нет</span>'}</div>
+ <h2>История (последние 20)</h2>${hist.length?hist.map(o=>`<div class="card"><div class="row sp"><b>#${o.num} ${esc(o.client)}</b><span class="muted">${dd(o.sold)} ${hm(o.sold)}</span></div><div class="muted">${o.items.map(i=>`${i.qty}× ${esc(i.name)}`).join(', ')}</div><div class="row sp"><b>${money(oTotal(o))}</b><button class="sm" data-a="unsell" data-id="${o.num}">Отменить продажу</button></div></div>`).join(''):'<div class="card muted">Пусто</div>'}
+ <div class="row" style="margin-top:10px"><button class="grow" data-a="csv">📋 Скопировать таблицу (CSV)</button><button class="grow" data-a="demo">🎲 Загрузить демо-данные</button></div>`}
+function finV(){const r=ui.fr,os=inRange(sold(),o=>o.sold,r),fn=inRange(S.fin,f=>f.ts,r),ls=inRange(S.losses,l=>l.ts,r);
+ const rev=sum(os,oTotal),cg=sum(os,oCost),gross=rev-cg;
+ const opex=sum(fn.filter(f=>f.type==='out'&&OPEX.includes(f.cat)),f=>f.sum),loss=sum(ls,l=>l.sum),net=gross-opex-loss;
+ const inc=rev+sum(fn.filter(f=>f.type==='in'),f=>f.sum),out=sum(fn.filter(f=>f.type==='out'),f=>f.sum);
+ const pc=v=>rev?Math.round(v/rev*100)+'%':'—';
+ const N=r==='month'||r==='all'?30:7,days=[];for(let i=N-1;i>=0;i--){const s=startDay(Date.now())-i*DAY;days.push({s,v:sum(sold().filter(o=>o.sold>=s&&o.sold<s+DAY),oTotal)})}
+ const mxd=Math.max(1,...days.map(d=>d.v)),best=days.reduce((a,b)=>b.v>a.v?b:a,days[0]),avg=sum(days,d=>d.v)/days.length;
+ const ec={};fn.filter(f=>f.type==='out'&&OPEX.includes(f.cat)).forEach(f=>ec[f.cat]=(ec[f.cat]||0)+f.sum);if(loss)ec['Потери (списания)']=loss;
+ const el=Object.entries(ec).sort((a,b)=>b[1]-a[1]),et=sum(el,x=>x[1])||1;
+ const dp={};os.forEach(o=>o.items.forEach(i=>{const d=dp[i.name]||(dp[i.name]={q:0,r:0,c:0});d.q+=i.qty;d.r+=i.price*i.qty;d.c+=i.cost*i.qty}));
+ const dl=Object.entries(dp).sort((a,b)=>(b[1].r-b[1].c)-(a[1].r-a[1].c));
+ const lr={};ls.forEach(l=>lr[l.reason]=(lr[l.reason]||0)+l.sum);
+ const cats=ui.ff.type==='in'?INCAT:[...OPEX,...PURCH];
+ return chips(r,[['today','Сегодня'],['week','7 дней'],['month','Месяц'],['all','Всё время']],'fr')+
+ `<div class="kpi"><div><small>Выручка</small><b>${mt(rev)}</b></div><div><small>Себестоимость продаж</small><b>${mt(cg)}</b></div><div><small>Валовая прибыль · ${pc(gross)}</small><b style="color:var(--ok)">${mt(gross)}</b></div><div><small>Чистая прибыль · ${pc(net)}</small><b style="color:${net>=0?'var(--ok)':'var(--er)'}">${mt(net)}</b></div></div>
+ <details class="card"><summary>Как считается прибыль</summary><div class="muted">Выручка − себестоимость = валовая прибыль. Из неё вычитаются расходы на работу (аренда, зарплата, коммуналка, реклама, связь, оборудование, налоги, прочее) и потери (списания) — получается чистая прибыль. Закупка продуктов в прибыль не вычитается, чтобы не считать дважды: она уже учтена в себестоимости и потерях.</div></details>
+ <h2>Движение денег</h2><div class="card"><div class="row sp"><span>Приход (выручка и прочее)</span><b style="color:var(--ok)">+${mt(inc)}</b></div><div class="row sp"><span>Расход (закупки и работа)</span><b style="color:var(--er)">−${mt(out)}</b></div><div class="row sp"><b>Итог по деньгам</b><b>${mt(inc-out)}</b></div></div>
+ <h2>Выручка по дням</h2><div class="chart">${days.map(d=>{const w=(new Date(d.s).getDay()+6)%7>=5;return`<i class="${w?'we':''}" style="height:${d.v/mxd*100}%" title="${dd(d.s)}: ${mt(d.v)}"></i>`}).join('')}</div>
+ <div class="muted" style="margin-top:4px">Лучший день: ${dd(best.s)} — ${mt(best.v)} · в среднем ${mt(avg)} · выходные синим</div>
+ <h2>Расходы по статьям</h2><div class="card">${el.length?el.map(x=>`<div style="margin-bottom:8px"><div class="row sp"><span>${esc(x[0])}</span><span class="m">${mt(x[1])} · ${Math.round(x[1]/et*100)}%</span></div><div class="bar"><i style="width:${x[1]/et*100}%"></i></div></div>`).join(''):'<span class="muted">Расходов нет</span>'}</div>
+ <h2>Прибыль по блюдам</h2><div class="card" style="overflow:auto"><table><tr><th>Блюдо</th><th>Шт</th><th>Выручка</th><th>Себест.</th><th>Прибыль</th><th>Маржа</th></tr>${dl.map(d=>`<tr><td>${esc(d[0])}</td><td>${d[1].q}</td><td class="m">${nf.format(Math.round(d[1].r/1000))}к</td><td class="m">${nf.format(Math.round(d[1].c/1000))}к</td><td class="m">${nf.format(Math.round((d[1].r-d[1].c)/1000))}к</td><td>${d[1].r?Math.round((d[1].r-d[1].c)/d[1].r*100):0}%</td></tr>`).join('')||'<tr><td>Нет данных</td></tr>'}</table></div>
+ <h2>Потери (списания): ${mt(loss)}</h2><div class="card">${Object.keys(lr).length?Object.entries(lr).map(x=>`<div class="row sp"><span>${esc(x[0])}</span><span class="m">${mt(x[1])}</span></div>`).join(''):'<span class="muted">Потерь нет</span>'}${ls.slice().sort((a,b)=>b.ts-a.ts).slice(0,5).map(l=>`<div class="row sp muted" style="margin-top:6px"><span>${dd(l.ts)} ${esc(l.name)} ${q2(l.qty)} ${esc(l.unit)} · ${esc(l.reason)}</span><button class="sm dng" data-a="lossdel" data-id="${l.id}" aria-label="Удалить">✕</button></div>`).join('')}</div>
+ <h2>Журнал приходов и расходов</h2>
+ <div class="card"><div class="seg"><button class="${ui.ff.type==='in'?'on':''}" data-a="fft" data-v="in">＋ Приход</button><button class="${ui.ff.type==='out'?'on':''}" data-a="fft" data-v="out">− Расход</button></div>
+ <div class="g2"><label class="f">Статья<select data-c="ff" data-k="cat">${cats.map(c=>`<option ${ui.ff.cat===c?'selected':''}>${esc(c)}</option>`).join('')}</select></label><label class="f">Сумма, ₫<input type="number" inputmode="numeric" data-c="ff" data-k="sum" value="${esc(ui.ff.sum)}" placeholder="0"></label></div>
+ <label class="f" style="margin:6px 0">Комментарий<input data-c="ff" data-k="note" value="${esc(ui.ff.note)}" placeholder="Необязательно"></label><button class="pri" style="width:100%" data-a="ffadd">Добавить операцию</button></div>
+ ${S.fin.slice().sort((a,b)=>b.ts-a.ts).slice(0,30).map(f=>`<div class="card row sp"><div class="grow"><b>${esc(f.cat)}</b><div class="muted">${dd(f.ts)} ${esc(f.note)}</div></div><b class="m" style="color:${f.type==='in'?'var(--ok)':'var(--er)'}">${f.type==='in'?'+':'−'}${mt(f.sum)}</b><button class="sm dng" data-a="findel" data-id="${f.id}" aria-label="Удалить">✕</button></div>`).join('')}`}
+function hoursV(){const os=inRange(sold(),o=>o.sold,ui.hr);const H=[];for(let h=9;h<=22;h++)H.push(h);
+ const g=Array.from({length:7},()=>H.map(()=>0)),ht=H.map(()=>0),wd=Array(7).fill(0),wdn=Array.from({length:7},()=>new Set());
+ os.forEach(o=>{const d=new Date(o.sold),w=(d.getDay()+6)%7,h=d.getHours(),i=H.indexOf(h);if(i>=0){g[w][i]++;ht[i]++}wd[w]+=oTotal(o);wdn[w].add(startDay(o.sold))});
+ const mx=Math.max(1,...g.flat()),WD=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+ const pk=H.map((h,i)=>[h,ht[i]]).sort((a,b)=>b[1]-a[1]).slice(0,3).filter(x=>x[1]>0);
+ const wa=wd.map((v,i)=>wdn[i].size?v/wdn[i].size:0),wm=Math.max(1,...wa),bi=wa.indexOf(Math.max(...wa));
+ return chips(ui.hr,[['week','7 дней'],['month','Месяц'],['all','Всё время']],'hr')+
+ (os.length?`<div class="card"><b>Пик-часы:</b> ${pk.map(p=>p[0]+':00–'+(p[0]+1)+':00').join(', ')||'—'}<div class="muted">Заготовки лучше готовить за час до пика. Самый сильный день: ${WD[bi]} (в среднем ${mt(wa[bi])}).</div></div>
+ <h2>Заказы по часам и дням</h2><div class="card"><div class="heat"><div></div>${H.map(h=>`<div>${h}</div>`).join('')}${g.map((row,w)=>`<div>${WD[w]}</div>`+row.map(v=>`<div class="c" style="--p:${Math.round(v/mx*100)}" title="${WD[w]} ${v}">${v||''}</div>`).join('')).join('')}</div></div>
+ <h2>Средняя выручка по дням недели</h2><div class="card">${wa.map((v,i)=>`<div style="margin-bottom:8px"><div class="row sp"><span>${WD[i]}</span><span class="m">${mt(v)}</span></div><div class="bar"><i style="width:${v/wm*100}%"></i></div></div>`).join('')}</div>`:'<div class="card muted">Пока нет продаж. Загрузите демо-данные на вкладке «Продажи».</div>')}
+function shiftV(){const last=S.shifts.length?S.shifts[S.shifts.length-1].ts:0;const os=sold().filter(o=>o.sold>last);
+ const cash=sum(os.filter(o=>o.pay==='cash'),oTotal),card=sum(os.filter(o=>o.pay==='card'),oTotal);
+ const fl=+ui.sh.float||0,exp=fl+cash,ct=ui.sh.counted===''?null:+ui.sh.counted,df=ct==null?null:ct-exp;
+ return `<h2 style="margin-top:0">Текущая смена</h2><div class="kpi"><div><small>Заказов</small><b>${os.length}</b></div><div><small>Выручка</small><b>${mt(cash+card)}</b></div><div><small>Наличные</small><b>${mt(cash)}</b></div><div><small>Карта</small><b>${mt(card)}</b></div></div>
+ <div class="card"><div class="g2"><label class="f">Касса на начало, ₫<input type="number" inputmode="numeric" data-c="sh" data-k="float" value="${esc(ui.sh.float)}" placeholder="0"></label><label class="f">Посчитано в кассе, ₫<input type="number" inputmode="numeric" data-c="sh" data-k="counted" value="${esc(ui.sh.counted)}" placeholder="0"></label></div>
+ <div class="row sp" style="margin:8px 0"><span>Должно быть в кассе</span><b class="m">${mt(exp)}</b></div>
+ ${df!=null?`<div class="row sp"><span>Расхождение</span><b class="m" style="color:${df===0?'var(--ok)':'var(--er)'}">${df>0?'+':''}${mt(df)}</b></div>`:''}
+ <label class="f" style="margin:8px 0">Комментарий<input data-c="sh" data-k="note" value="${esc(ui.sh.note)}" placeholder="Необязательно"></label>
+ <button class="pri" style="width:100%" data-a="shclose">🔒 Закрыть смену</button></div>
+ <h2>Закрытые смены</h2>${S.shifts.length?S.shifts.slice().reverse().slice(0,15).map(s=>`<div class="card"><div class="row sp"><b>${dd(s.ts)} ${hm(s.ts)}</b><span class="badge ${s.diff===0?'b-ok':'b-er'}">${s.diff===0?'Сошлась':(s.diff>0?'+':'')+mt(s.diff)}</span></div><div class="muted">Заказов ${s.orders} · нал ${mt(s.cash)} · карта ${mt(s.card)}</div>${s.note?`<div class="muted">💬 ${esc(s.note)}</div>`:''}</div>`).join(''):'<div class="card muted">Смен ещё не было</div>'}`}
+
+/* --- меню --- */
+function vMenu(){
+ const sw=`<div class="seg"><button class="${ui.mmode==='dishes'?'on':''}" data-a="mmode" data-v="dishes">Блюда и цены</button><button class="${ui.mmode==='tc'?'on':''}" data-a="mmode" data-v="tc">Технологические карты</button></div>`;
+ let body;
+ if(ui.mmode==='dishes')body=S.menu.map(m=>`<div class="card"><div class="row sp"><b>${esc(m.em)} ${esc(m.name)}</b><span class="row"><button class="sm ${m.on?'ok':''}" data-a="dishon" data-id="${m.id}">${m.on?'Есть':'Стоп'}</button><button class="sm dng" data-a="dishdel" data-id="${m.id}" aria-label="Удалить">🗑</button></span></div>
+  <div class="g2" style="margin-top:6px"><label class="f">Цена, ₫<input type="number" inputmode="numeric" data-c="m" data-id="${m.id}" data-k="price" value="${m.price}"></label><label class="f">Себестоимость, ₫${hasTC(m)?' (из тех. карты)':''}<input type="number" inputmode="numeric" ${hasTC(m)?'disabled':''} data-c="m" data-id="${m.id}" data-k="cost" value="${Math.round(dishCost(m))}"></label></div></div>`).join('')+
+  `<div class="card"><b>Новое блюдо</b><div class="g3" style="margin-top:6px"><label class="f">Эмодзи<input data-c="nd" data-k="em" value="${esc(ui.nd.em)}"></label><label class="f">Название<input data-c="nd" data-k="name" value="${esc(ui.nd.name)}"></label><label class="f">Цена, ₫<input type="number" inputmode="numeric" data-c="nd" data-k="price" value="${esc(ui.nd.price)}"></label></div><button class="pri" style="width:100%;margin-top:8px" data-a="dishadd">Добавить блюдо</button></div>`;
+ else body=S.menu.map(m=>{const c=calcTC(m.tc),fc=m.price?dishCost(m)/m.price*100:0;return`<div class="card"><div class="row sp"><b>${esc(m.em)} ${esc(m.name)}</b><button class="sm" data-a="tcopen" data-id="${m.id}">Открыть</button></div>${hasTC(m)?`<div class="muted">${m.tc.ings.length} ингр. · выход ${Math.round(c.out)} г · ${Math.round(c.k)} ккал · фудкост <b style="color:${fc>35?'var(--er)':'var(--ok)'}">${Math.round(fc)}%</b> · наценка ${dishCost(m)?Math.round((m.price/dishCost(m)-1)*100):0}%</div>`:'<div class="muted">Тех. карта не заполнена</div>'}</div>`}).join('');
+ return sw+body+tools()}
+function tools(){const sz=+(localStorage.getItem('burger-zoom')||.92);
+ return `<h2>Размер интерфейса</h2><div class="seg">${[['Мелкий',.85],['Средний',.92],['Крупный',1]].map(z=>`<button class="${sz===z[1]?'on':''}" data-a="zoom" data-v="${z[1]}">${z[0]}</button>`).join('')}</div>
+ <h2>Обновление</h2><div class="card"><div class="row sp"><span>Версия <b>${esc(document.querySelector('meta[name=app-version]').content)}</b></span><button data-a="upd">Проверить обновления</button></div></div>
+ <details class="card"><summary>💾 Резервная копия</summary><div class="muted" style="margin-bottom:6px">Последняя копия: ${localStorage.getItem('burger-lastbk')||'ещё не делали'}</div>
+ <div class="g2"><button data-a="bkdl">Скачать JSON</button><button data-a="bkcopy">Скопировать текстом</button></div>
+ <label class="f" style="margin:8px 0 0">Восстановить из файла<input type="file" id="bkfile" accept=".json,application/json"></label>
+ <label class="f" style="margin-top:8px">Восстановить из текста<textarea id="bktxt" placeholder="Вставьте скопированную копию"></textarea></label><button style="width:100%;margin-top:6px" data-a="bktxtgo">Восстановить из текста</button></details>
+ <button class="dng" style="width:100%;margin:6px 0 20px" data-a="reset">${ui.resetArm?'Нажмите ещё раз — всё будет удалено':'Сбросить все данные'}</button>`}
+
+/* --- заготовки --- */
+function vPreps(){const a=S.preps.slice().sort((x,y)=>prepState(x).o-prepState(y).o||x.name.localeCompare(y.name));
+ const n1=S.preps.filter(p=>p.qty<p.par).length,n2=S.preps.filter(prepUrgent).length;
+ return `<div class="kpi"><div><small>Нужно заготовить</small><b>${n1}</b></div><div><small>Срок на исходе</small><b style="color:${n2?'var(--er)':'inherit'}">${n2}</b></div></div>`+
+ a.map(p=>{const st=prepState(p),ratio=p.par?Math.min(1,p.qty/p.par):1,more=Math.max(0,p.par-p.qty);return`<div class="card"><div class="row sp"><b>${esc(p.name)}</b><span class="badge ${st.c}">${st.t}</span></div>
+ <div class="row sp" style="margin:4px 0"><span>Остаток <b>${q2(p.qty)} ${esc(p.unit||'порц')}</b> из ${q2(p.par)}</span>${more>0?`<span class="badge b-wa">заготовить ещё ${q2(more)}</span>`:''}</div>
+ <div class="bar ${ratio<.34?'er':ratio<.8?'wa':'ok'}"><i style="width:${ratio*100}%"></i></div>
+ <div class="g2" style="margin-top:8px"><button class="pri" data-a="pbatch" data-id="${p.id}">+ Заготовил партию (${q2(p.batch)})</button><button data-a="puse" data-id="${p.id}">− Израсходовано</button></div>
+ <div class="row" style="margin-top:6px"><label class="f grow">Годно до<input type="date" data-c="pr" data-id="${p.id}" data-k="exp" value="${p.exp?isoDay(p.exp):''}"></label><button class="sm" data-a="pwaste" data-id="${p.id}">Списать</button><button class="sm dng" data-a="pdel" data-id="${p.id}" aria-label="Удалить">🗑</button></div>
+ <details><summary class="muted">⚙ Параметры</summary><div class="g2"><label class="f">Название<input data-c="pr" data-id="${p.id}" data-k="name" value="${esc(p.name)}"></label><label class="f">Единица<input data-c="pr" data-id="${p.id}" data-k="unit" value="${esc(p.unit||'порц')}"></label><label class="f">Норма на смену<input type="number" step="any" data-c="pr" data-id="${p.id}" data-k="par" value="${p.par}"></label><label class="f">Размер партии<input type="number" step="any" data-c="pr" data-id="${p.id}" data-k="batch" value="${p.batch}"></label><label class="f">Срок годности, дней<input type="number" data-c="pr" data-id="${p.id}" data-k="shelf" value="${p.shelf}"></label></div></details></div>`}).join('')+
+ `<div class="card"><b>Новая заготовка</b><div class="g2" style="margin-top:6px"><label class="f">Название<input data-c="np" data-k="name" value="${esc(ui.np.name)}"></label><label class="f">Норма на смену<input type="number" step="any" data-c="np" data-k="par" value="${esc(ui.np.par)}"></label><label class="f">Размер партии<input type="number" step="any" data-c="np" data-k="batch" value="${esc(ui.np.batch)}"></label><label class="f">Срок годности, дней<input type="number" data-c="np" data-k="shelf" value="${esc(ui.np.shelf)}"></label></div><button class="pri" style="width:100%;margin-top:8px" data-a="padd">Добавить заготовку</button></div>`}
+
+/* --- склад --- */
+const catOf=id=>S.cats.find(c=>c.id===id)||{em:'📦',name:'Без раздела'};
+function vStock(){const low=S.stock.filter(isLow);
+ const cc=id=>S.stock.filter(i=>id==='all'||i.cat===id).length;
+ const list=S.stock.filter(i=>ui.scat==='all'||i.cat===ui.scat).sort((a,b)=>isLow(b)-isLow(a)||a.name.localeCompare(b.name));
+ return (low.length?`<div class="card" style="background:var(--wab);border-color:var(--wa)"><div class="row sp"><b style="color:var(--wa)">⚠ Пора закупить: ${low.length}</b><button class="pri sm" data-a="shop">🛒 Список покупок</button></div></div>`:'')+
+ `<div class="chips"><button class="${ui.scat==='all'?'on':''}" data-a="scat" data-v="all">Все<span class="cnt">${cc('all')}</span></button>${S.cats.map(c=>`<button class="${ui.scat===c.id?'on':''}" data-a="scat" data-v="${c.id}">${esc(c.em)} ${esc(c.name)}<span class="cnt">${cc(c.id)}</span></button>`).join('')}<button data-a="cats">⚙ Разделы</button></div>`+
+ (list.length?list.map(i=>{const c=catOf(i.cat);return`<div class="card"><div class="row sp"><b>${esc(c.em)} ${esc(i.name)}</b><span class="badge ${isLow(i)?'b-er':'b-ok'}">${isLow(i)?'Мало':'В норме'}</span></div>
+ <div class="row sp" style="margin:6px 0"><div class="step"><button data-a="sdec" data-id="${i.id}">−</button><b class="m">${q2(i.qty)} ${esc(i.unit)}</b><button data-a="sinc" data-id="${i.id}">+</button></div><span class="muted">шаг ${q2(stepOf(i.unit))}</span></div>
+ <div class="g2"><label class="f">Минимум, ${esc(i.unit)}<input type="number" step="any" data-c="st" data-id="${i.id}" data-k="min" value="${i.min}"></label><label class="f">Цена за ${esc(i.unit)}, ₫<input type="number" step="any" data-c="st" data-id="${i.id}" data-k="price" value="${i.price}"></label></div>
+ <div class="row" style="margin-top:6px"><label class="f grow">Раздел<select data-c="st" data-id="${i.id}" data-k="cat">${S.cats.map(x=>`<option value="${x.id}" ${x.id===i.cat?'selected':''}>${esc(x.em)} ${esc(x.name)}</option>`).join('')}</select></label><button class="sm" data-a="swaste" data-id="${i.id}">Списать</button><button class="sm dng" data-a="sdel" data-id="${i.id}" aria-label="Удалить">🗑</button></div></div>`}).join(''):'<div class="card muted">В этом разделе пока пусто. Добавьте позицию ниже.</div>')+
+ `<div class="card"><b>Новая позиция</b><div class="g2" style="margin-top:6px"><label class="f">Название<input data-c="ns" data-k="name" value="${esc(ui.ns.name)}"></label><label class="f">Раздел<select data-c="ns" data-k="cat">${S.cats.map(x=>`<option value="${x.id}" ${x.id===ui.ns.cat?'selected':''}>${esc(x.em)} ${esc(x.name)}</option>`).join('')}</select></label>
+ <label class="f">Остаток<input type="number" step="any" data-c="ns" data-k="qty" value="${esc(ui.ns.qty)}"></label><label class="f">Единица<select data-c="ns" data-k="unit">${['шт','кг','л','уп'].map(u=>`<option ${ui.ns.unit===u?'selected':''}>${u}</option>`).join('')}</select></label>
+ <label class="f">Минимум<input type="number" step="any" data-c="ns" data-k="min" value="${esc(ui.ns.min)}"></label><label class="f">Цена за ед., ₫<input type="number" step="any" data-c="ns" data-k="price" value="${esc(ui.ns.price)}"></label></div><button class="pri" style="width:100%;margin-top:8px" data-a="sadd">Добавить позицию</button></div>`}
+
+/* --- шторки --- */
+function shopList(){return S.stock.filter(isLow).map(i=>({i,n:need(i)}))}
+function renderSheet(){const sh=$('#sheet'),c=$('#shc');if(!ui.sheet){sh.classList.remove('show');return}
+ const t=ui.sheet.t;let h='';const close=`<button class="sm" data-a="close">Закрыть ✕</button>`;
+ if(t==='cart'){const cs=cartSum(),k=ui.ck;
+  h=`<div class="row sp"><h2 style="margin:0">🛒 Оформление</h2>${close}</div>`+Object.keys(ui.cart).map(id=>{const m=S.menu.find(x=>x.id===+id);if(!m)return'';const q=ui.cart[id];return`<div class="card row sp"><span class="grow">${esc(m.em)} ${esc(m.name)}<div class="muted">${mt(m.price)}</div></span><div class="step"><button data-a="rem" data-id="${m.id}">−</button><b>${q}</b><button data-a="add" data-id="${m.id}">+</button></div></div>`}).join('')+
+  `<label class="f">Имя клиента или стол<input data-c="ck" data-k="client" value="${esc(k.client)}" placeholder="Например: Стол 4"></label>
+  <div class="g2" style="margin:8px 0"><div class="seg" style="margin:0"><button class="${k.type==='here'?'on':''}" data-a="ckt" data-v="here">На месте</button><button class="${k.type==='go'?'on':''}" data-a="ckt" data-v="go">С собой</button></div><div class="seg" style="margin:0"><button class="${k.pay==='cash'?'on':''}" data-a="ckp" data-v="cash">Нал</button><button class="${k.pay==='card'?'on':''}" data-a="ckp" data-v="card">Карта</button></div></div>
+  <label class="f">Комментарий<input data-c="ck" data-k="note" value="${esc(k.note)}" placeholder="Без лука"></label>
+  ${k.type==='go'?'<div class="muted" style="margin-top:4px">📦 При продаже спишется упаковка «С собой».</div>':''}
+  <div class="row sp" style="margin:12px 0"><b style="font-size:16px">Итого</b><b class="sum">${money(cs.s)}</b></div><button class="pri" style="width:100%;min-height:52px" data-a="mk" ${cs.n?'':'disabled'}>Создать заказ</button>`}
+ else if(t==='shop'){const L=shopList();
+  h=`<div class="row sp"><h2 style="margin:0">🛒 Список покупок</h2>${close}</div>`+(L.length?L.map(x=>`<div class="card row sp"><div class="grow"><b>${esc(catOf(x.i.cat).em)} ${esc(x.i.name)}</b><div class="muted">осталось ${q2(x.i.qty)}, докупить <b>${q2(x.n)} ${esc(x.i.unit)}</b>${x.i.price?' · ≈'+mt(x.n*x.i.price):''}</div></div><button class="ok sm" data-a="buy" data-id="${x.i.id}">Купил</button></div>`).join('')+`<div class="row sp" style="margin:8px 0"><b>Примерно</b><b>${mt(sum(L,x=>x.n*x.i.price))}</b></div><button class="pri" style="width:100%" data-a="shopcopy">📋 Скопировать список</button>`:'<div class="card muted">Всё в норме — покупать нечего 👍</div>')}
+ else if(t==='cats'){
+  h=`<div class="row sp"><h2 style="margin:0">⚙ Разделы склада</h2>${close}</div>`+S.cats.map(c=>{const n=S.stock.filter(i=>i.cat===c.id).length;return`<div class="card row sp"><span>${esc(c.em)} ${esc(c.name)} <span class="muted">· ${n}</span></span><button class="sm dng" data-a="catdel" data-id="${c.id}" ${n?'disabled':''} aria-label="Удалить">🗑</button></div>`}).join('')+`<div class="muted">Удалить можно только пустой раздел.</div><div class="card" style="margin-top:8px"><b>Новый раздел</b><div class="g2" style="margin-top:6px"><label class="f">Эмодзи<input id="nce" value="🛒"></label><label class="f">Название<input id="ncn" placeholder="Например: Напитки"></label></div><button class="pri" style="width:100%;margin-top:8px" data-a="cataddgo">Добавить раздел</button></div>`}
+ else if(t==='waste'){const w=ui.sheet,it=w.kind==='stock'?stockBy(w.id):S.preps.find(p=>p.id===w.id);if(!it){ui.sheet=null;return}
+  h=`<div class="row sp"><h2 style="margin:0">Списать: ${esc(it.name)}</h2>${close}</div><div class="muted">Остаток ${q2(it.qty)} ${esc(it.unit||'порц')}</div><div class="g2" style="margin:8px 0"><label class="f">Количество<input id="wq" type="number" step="any" value="${w.qty||1}"></label><label class="f">Причина<select id="wr">${REASONS.map(r=>`<option>${r}</option>`).join('')}</select></label></div><button class="pri" style="width:100%" data-a="wgo">Списать</button>`}
+ else if(t==='tc'){const m=S.menu.find(x=>x.id===ui.sheet.id);if(!m){ui.sheet=null;return}const c=calcTC(m.tc),fc=m.price?dishCost(m)/m.price*100:0;
+  const sopt=(v)=>`<option value="">— нет —</option>`+S.stock.map(s=>`<option value="${s.id}" ${s.id===v?'selected':''}>${esc(catOf(s.cat).em)} ${esc(s.name)} (${esc(s.unit)})</option>`).join('');
+  h=`<div class="row sp"><h2 style="margin:0">${esc(m.em)} ${esc(m.name)}</h2>${close}</div>
+  <div class="kpi" style="margin-top:8px"><div><small>Выход</small><b>${Math.round(c.out)} г</b></div><div><small>Себестоимость</small><b>${mt(dishCost(m))}</b></div><div><small>Фудкост</small><b style="color:${fc>35?'var(--er)':'var(--ok)'}">${Math.round(fc)}%</b></div><div><small>Наценка</small><b>${dishCost(m)?Math.round((m.price/dishCost(m)-1)*100):0}%</b></div></div>
+  <div class="card muted">На порцию: <b>${Math.round(c.k)} ккал</b> · Б ${q2(c.p)} · Ж ${q2(c.f)} · У ${q2(c.c)}<br>На 100 г: ${Math.round(c.k100)} ккал · Б ${q2(c.p100)} · Ж ${q2(c.f100)} · У ${q2(c.c100)}</div>
+  <h3>Состав</h3>`+m.tc.ings.map((g,i)=>`<div class="ing"><div class="g3"><label class="f" style="grid-column:span 2">Название<input data-c="ing" data-id="${m.id}" data-i="${i}" data-k="name" value="${esc(g.name)}"></label><label class="f">Кол-во<input type="number" step="any" data-c="ing" data-id="${m.id}" data-i="${i}" data-k="qty" value="${g.qty}"></label></div>
+  <div class="g3" style="margin-top:6px"><label class="f">Единица<select data-c="ing" data-id="${m.id}" data-i="${i}" data-k="unit">${['г','мл','шт'].map(u=>`<option ${g.unit===u?'selected':''}>${u}</option>`).join('')}</select></label><label class="f">Цена за ${g.unit==='шт'?'шт':g.unit==='мл'?'л':'кг'}<input type="number" step="any" data-c="ing" data-id="${m.id}" data-i="${i}" data-k="price" value="${g.price||0}"></label>${g.unit==='шт'?`<label class="f">Вес 1 шт, г<input type="number" step="any" data-c="ing" data-id="${m.id}" data-i="${i}" data-k="w" value="${g.w||0}"></label>`:'<div></div>'}</div>
+  <div class="g4" style="margin-top:6px">${[['kcal','ккал'],['p','Б'],['f','Ж'],['c','У']].map(n=>`<label class="f">${n[1]}<input type="number" step="any" data-c="ing" data-id="${m.id}" data-i="${i}" data-k="${n[0]}" value="${g[n[0]]||0}"></label>`).join('')}</div><div class="muted">КБЖУ ${g.unit==='шт'?'на 1 шт':'на 100 '+g.unit}</div>
+  <div class="row" style="margin-top:6px"><label class="f grow">Склад (списывать)<select data-c="ing" data-id="${m.id}" data-i="${i}" data-k="stockId">${sopt(g.stockId)}</select></label><button class="sm dng" data-a="ingdel" data-id="${m.id}" data-i="${i}" aria-label="Удалить">🗑</button></div></div>`).join('')+
+  `<button style="width:100%" data-a="ingadd" data-id="${m.id}">＋ Добавить ингредиент</button>
+  <h3>📦 Упаковка и расходники (списываются при продаже)</h3>`+m.pack.map((k,i)=>`<div class="ing"><div class="row"><label class="f grow">Позиция<select data-c="pk" data-id="${m.id}" data-i="${i}" data-k="stockId">${sopt(k.stockId)}</select></label></div><div class="g2" style="margin-top:6px"><label class="f">Кол-во на порцию<input type="number" step="any" data-c="pk" data-id="${m.id}" data-i="${i}" data-k="qty" value="${k.qty}"></label><label class="f">Когда<select data-c="pk" data-id="${m.id}" data-i="${i}" data-k="mode"><option value="go" ${k.mode==='go'?'selected':''}>Только «С собой»</option><option value="all" ${k.mode==='all'?'selected':''}>Всегда</option></select></label></div><button class="sm dng" style="margin-top:6px" data-a="pkdel" data-id="${m.id}" data-i="${i}">Убрать</button></div>`).join('')+
+  `<button style="width:100%" data-a="pkadd" data-id="${m.id}">＋ Добавить упаковку</button>
+  <h3>Технология</h3><div class="g2"><label class="f">Время, мин<input type="number" data-c="tc" data-id="${m.id}" data-k="time" value="${m.tc.time||0}"></label></div><label class="f" style="margin-top:6px">Описание<textarea data-c="tc" data-id="${m.id}" data-k="steps">${esc(m.tc.steps)}</textarea></label>`}
+ c.innerHTML=h;sh.classList.add('show')}
+
+/* ===== действия ===== */
+function csvCopy(){const rows=['№;Дата;Клиент;Тип;Оплата;Состав;Сумма'];inRange(sold(),o=>o.sold,ui.sr).forEach(o=>rows.push([o.num,dd(o.sold)+' '+hm(o.sold),'"'+(o.client||'').replace(/"/g,'""')+'"',o.type==='go'?'С собой':'На месте',o.pay==='card'?'Карта':'Нал','"'+o.items.map(i=>i.qty+'x '+i.name).join(', ')+'"',oTotal(o)].join(';')));return rows.join('\n')}
+async function copyText(t){try{await navigator.clipboard.writeText(t);return true}catch(e){const a=document.createElement('textarea');a.value=t;a.style.cssText='position:fixed;opacity:0';document.body.appendChild(a);a.select();let ok=false;try{ok=document.execCommand('copy')}catch(x){}a.remove();return ok}}
+function restoreData(txt){let d;try{d=JSON.parse(txt)}catch(e){toast('Не удалось прочитать копию');return}
+ if(!d||!Array.isArray(d.menu)||!Array.isArray(d.orders)||!Array.isArray(d.stock)){toast('Это не резервная копия приложения');return}
+ act('Данные восстановлены',()=>{S=norm(d)})}
+const bkText=()=>JSON.stringify(S);
+function markBackup(){try{localStorage.setItem('burger-lastbk',new Date().toLocaleString('ru-RU'))}catch(e){}}
+function setTheme(t){document.documentElement.dataset.theme=t;try{localStorage.setItem('burger-theme',t)}catch(e){}}
+function setZoom(z){document.documentElement.style.zoom=z;try{localStorage.setItem('burger-zoom',z)}catch(e){}}
+async function checkUpdate(silent){
+ try{const r=await fetch('burger-app.html?_='+Date.now(),{cache:'no-store'});const t=await r.text();const m=t.match(/name="app-version" content="([^"]+)"/);const cur=document.querySelector('meta[name=app-version]').content;
+  if(m&&m[1]!==cur){if(Object.keys(ui.cart).length){toast('Доступна версия '+m[1]+'. Оформите заказ и обновите');return}save();toast('Обновляю до '+m[1]+'…');setTimeout(()=>location.reload(),600)}
+  else if(!silent)toast('У вас последняя версия')}catch(e){if(!silent)toast('Нет сети — проверить нельзя')}}
+
+function A(a,d,e){const id=+d.id,v=d.v;const mk=()=>S.menu.find(x=>x.id===id);
+ switch(a){
+ case'tab':ui.tab=v;ui.sheet=null;return render();
+ case'theme':{const dark=document.documentElement.dataset.theme==='dark'||(!document.documentElement.dataset.theme&&matchMedia('(prefers-color-scheme:dark)').matches);setTheme(dark?'light':'dark');return render()}
+ case'zoom':setZoom(+v);return render();
+ case'osub':ui.osub=v;return render();
+ case'of':ui.of=v;return render();
+ case'add':{const m=mk();if(!m||!m.on)return;ui.cart[id]=(ui.cart[id]||0)+1;return render()}
+ case'rem':{e.stopPropagation();if(ui.cart[id]>1)ui.cart[id]--;else delete ui.cart[id];if(!Object.keys(ui.cart).length&&ui.sheet&&ui.sheet.t==='cart')ui.sheet=null;return render()}
+ case'cart':ui.sheet={t:'cart'};return render();
+ case'close':ui.sheet=null;return render();
+ case'ckt':ui.ck.type=v;return render();
+ case'ckp':ui.ck.pay=v;return render();
+ case'mk':{const items=Object.keys(ui.cart).map(k=>{const m=S.menu.find(x=>x.id===+k);return m?{id:m.id,name:m.name,price:m.price,cost:dishCost(m),qty:ui.cart[k]}:null}).filter(Boolean);if(!items.length)return;
+  act('Заказ создан',()=>{const n=S.seq.order++;S.orders.push({num:n,client:ui.ck.client.trim(),type:ui.ck.type,pay:ui.ck.pay,note:ui.ck.note.trim(),status:'new',items,created:Date.now(),sold:null,deducted:[]});ui.cart={};ui.ck.client='';ui.ck.note='';ui.sheet=null;ui.osub='q'});return}
+ case'adv':{const o=S.orders.find(x=>x.num===id);if(!o)return;const nx=ST[ST.indexOf(o.status)+1];
+  act(nx==='sold'?'Продан · склад списан':'Статус: '+STN[nx],()=>{o.status=nx;if(nx==='sold'){o.sold=Date.now();o.deducted=deductFor(o)}});return}
+ case'ocancel':act('Заказ отменён',()=>{S.orders=S.orders.filter(o=>o.num!==id)});return;
+ case'unsell':act('Продажа отменена · склад возвращён',()=>{const o=S.orders.find(x=>x.num===id);restore(o);o.status='ready';o.sold=null});return;
+ case'sr':ui.sr=v;return render();
+ case'fr':ui.fr=v;return render();
+ case'hr':ui.hr=v;return render();
+ case'ssub':ui.ssub=v;return render();
+ case'csv':copyText(csvCopy()).then(ok=>toast(ok?'Таблица скопирована':'Не удалось скопировать'));return;
+ case'demo':act('Демо-данные загружены',()=>{S=demo();ui.cart={}});return;
+ case'fft':ui.ff.type=v;ui.ff.cat=v==='in'?INCAT[0]:OPEX[0];return render();
+ case'ffadd':{const s=+ui.ff.sum;if(!s||s<=0){toast('Введите сумму');return}act('Операция добавлена',()=>{S.fin.push({id:S.seq.fin++,ts:Date.now(),type:ui.ff.type,cat:ui.ff.cat,note:ui.ff.note,sum:s});ui.ff.sum='';ui.ff.note=''});return}
+ case'findel':act('Операция удалена',()=>{S.fin=S.fin.filter(f=>f.id!==id)});return;
+ case'lossdel':act('Списание удалено',()=>{S.losses=S.losses.filter(f=>f.id!==id)});return;
+ case'shclose':{const last=S.shifts.length?S.shifts[S.shifts.length-1].ts:0;const os=sold().filter(o=>o.sold>last);const cash=sum(os.filter(o=>o.pay==='cash'),oTotal),card=sum(os.filter(o=>o.pay==='card'),oTotal);
+  const fl=+ui.sh.float||0,ct=ui.sh.counted===''?fl+cash:+ui.sh.counted;
+  act('Смена закрыта',()=>{S.shifts.push({id:S.seq.shift++,ts:Date.now(),from:last,orders:os.length,cash,card,float:fl,expected:fl+cash,counted:ct,diff:ct-(fl+cash),note:ui.sh.note});ui.sh={float:'',counted:'',note:''}});return}
+ case'mmode':ui.mmode=v;return render();
+ case'dishon':act('Стоп-лист обновлён',()=>{const m=mk();m.on=!m.on;if(!m.on)delete ui.cart[m.id]});return;
+ case'dishdel':act('Блюдо удалено',()=>{S.menu=S.menu.filter(m=>m.id!==id);delete ui.cart[id]});return;
+ case'dishadd':{if(!ui.nd.name.trim()){toast('Введите название');return}act('Блюдо добавлено',()=>{S.menu.push({id:S.seq.menu++,em:ui.nd.em||'🍽️',name:ui.nd.name.trim(),price:+ui.nd.price||0,cost:0,on:true,tc:{time:0,steps:'',ings:[]},pack:[]});ui.nd={em:'🍽️',name:'',price:''}});return}
+ case'tcopen':ui.sheet={t:'tc',id};return render();
+ case'ingadd':quiet(()=>mk().tc.ings.push({name:'Новый ингредиент',qty:0,unit:'г',kcal:0,p:0,f:0,c:0,price:0,stockId:null,w:0}));return;
+ case'ingdel':quiet(()=>mk().tc.ings.splice(+d.i,1));return;
+ case'pkadd':quiet(()=>mk().pack.push({stockId:null,qty:1,mode:'go'}));return;
+ case'pkdel':quiet(()=>mk().pack.splice(+d.i,1));return;
+ case'pbatch':act('Партия добавлена',()=>{const p=S.preps.find(x=>x.id===id);const ne=endDay(Date.now()+p.shelf*DAY);p.exp=(p.qty>0&&p.exp)?Math.min(p.exp,ne):ne;p.qty=+(p.qty+p.batch).toFixed(3)});return;
+ case'puse':quiet(()=>{const p=S.preps.find(x=>x.id===id);p.qty=Math.max(0,+(p.qty-prepStep(p)).toFixed(3));if(p.qty<=0)p.exp=null});return;
+ case'pwaste':act('Заготовка списана',()=>{const p=S.preps.find(x=>x.id===id);if(p.qty>0)S.losses.push({id:S.seq.loss++,ts:Date.now(),name:p.name,qty:p.qty,unit:p.unit||'порц',reason:prepState(p).o<=1?'Срок годности':'Другое',sum:0});p.qty=0;p.exp=null});return;
+ case'pdel':act('Заготовка удалена',()=>{S.preps=S.preps.filter(p=>p.id!==id)});return;
+ case'padd':{if(!ui.np.name.trim()){toast('Введите название');return}act('Заготовка добавлена',()=>{S.preps.push({id:S.seq.prep++,name:ui.np.name.trim(),qty:0,unit:'порц',par:+ui.np.par||1,batch:+ui.np.batch||1,shelf:+ui.np.shelf||1,exp:null});ui.np={name:'',par:'',batch:'',shelf:''}});return}
+ case'scat':ui.scat=v;return render();
+ case'sdec':quiet(()=>{const i=stockBy(id);i.qty=Math.max(0,+(i.qty-stepOf(i.unit)).toFixed(3))});return;
+ case'sinc':quiet(()=>{const i=stockBy(id);i.qty=+(i.qty+stepOf(i.unit)).toFixed(3)});return;
+ case'sdel':act('Позиция удалена',()=>{S.stock=S.stock.filter(i=>i.id!==id);S.menu.forEach(m=>{m.tc.ings.forEach(g=>{if(g.stockId===id)g.stockId=null});m.pack=m.pack.filter(k=>k.stockId!==id)})});return;
+ case'sadd':{if(!ui.ns.name.trim()){toast('Введите название');return}act('Позиция добавлена',()=>{S.stock.push({id:S.seq.stock++,name:ui.ns.name.trim(),qty:+ui.ns.qty||0,unit:ui.ns.unit,min:+ui.ns.min||0,cat:ui.ns.cat,price:+ui.ns.price||0});ui.ns.name='';ui.ns.qty='';ui.ns.min='';ui.ns.price=''});return}
+ case'shop':ui.sheet={t:'shop'};return render();
+ case'buy':act('Куплено',()=>{const i=stockBy(id),n=need(i);i.qty=+(i.qty+n).toFixed(3);if(i.price)S.fin.push({id:S.seq.fin++,ts:Date.now(),type:'out',cat:i.cat==='food'?PURCH[0]:PURCH[1],note:i.name,sum:Math.round(n*i.price)})});return;
+ case'shopcopy':{const L=shopList();copyText('🛒 Список покупок\n'+L.map(x=>'• '+x.i.name+' — '+q2(x.n)+' '+x.i.unit).join('\n')).then(ok=>toast(ok?'Список скопирован':'Не удалось скопировать'));return}
+ case'cats':ui.sheet={t:'cats'};return render();
+ case'catdel':act('Раздел удалён',()=>{S.cats=S.cats.filter(c=>c.id!==v);if(ui.scat===v)ui.scat='all'});return;
+ case'cataddgo':{const n=$('#ncn').value.trim();if(!n){toast('Введите название раздела');return}act('Раздел добавлен',()=>{S.cats.push({id:'c'+(S.seq.cat++),em:$('#nce').value.trim()||'📁',name:n})});return}
+ case'swaste':ui.sheet={t:'waste',kind:'stock',id};return render();
+ case'wgo':{const w=ui.sheet,it=w.kind==='stock'?stockBy(w.id):S.preps.find(p=>p.id===w.id),q=Math.min(+$('#wq').value||0,it.qty),r=$('#wr').value;if(q<=0){toast('Введите количество');return}
+  ui.sheet=null;act('Списано · потери записаны',()=>{it.qty=+(it.qty-q).toFixed(3);S.losses.push({id:S.seq.loss++,ts:Date.now(),name:it.name,qty:q,unit:it.unit||'порц',reason:r,sum:Math.round(q*(it.price||0))})});return}
+ case'upd':return checkUpdate(false);
+ case'bkdl':{const b=new Blob([bkText()],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='burger-backup-'+isoDay(Date.now())+'.json';document.body.appendChild(a);a.click();a.remove();markBackup();toast('Файл сохранён (если браузер разрешил)');return render()}
+ case'bkcopy':copyText(bkText()).then(ok=>{if(ok)markBackup();toast(ok?'Копия скопирована в буфер':'Не удалось скопировать')});return;
+ case'bktxtgo':return restoreData($('#bktxt').value);
+ case'reset':if(!ui.resetArm){ui.resetArm=true;render();setTimeout(()=>{ui.resetArm=false;if(ui.tab==='menu')render()},4000);return}
+  ui.resetArm=false;act('Все данные сброшены',()=>{S=norm(blank());ui.cart={}});return}}
+
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(b){if(b.disabled)return;A(b.dataset.a,b.dataset,e);return}
+ if(e.target.id==='sheet'){ui.sheet=null;render()}});
+const NUMK=new Set(['price','cost','qty','min','par','batch','shelf','kcal','p','f','c','w','time']);
+document.addEventListener('change',e=>{const t=e.target;
+ if(t.id==='bkfile'){const f=t.files[0];if(f)f.text().then(restoreData);return}
+ const c=t.dataset.c;if(!c)return;const k=t.dataset.k,id=+t.dataset.id,i=+t.dataset.i;let v=t.value;if(NUMK.has(k))v=+v||0;
+ const mk=()=>S.menu.find(x=>x.id===id);
+ switch(c){
+  case'ff':case'nd':case'ns':case'np':case'sh':case'ck':ui[c==='ff'?'ff':c==='sh'?'sh':c==='ck'?'ck':c][k]=t.value;if(c==='sh')render();return;
+  case'm':mk()[k]=v;save();return render();
+  case'ing':{const g=mk().tc.ings[i];g[k]=k==='stockId'?(v?+v:null):v;if(k==='stockId'&&v){const s=stockBy(+v);if(s&&s.price&&!g.price)g.price=g.unit==='шт'?s.price:s.price}save();return render()}
+  case'pk':{const g=mk().pack[i];g[k]=k==='stockId'?(v?+v:null):v;save();return render()}
+  case'tc':mk().tc[k]=v;save();return k==='time'?undefined:undefined;
+  case'st':{const s=stockBy(id);s[k]=k==='cat'?t.value:v;save();return render()}
+  case'pr':{const p=S.preps.find(x=>x.id===id);if(k==='exp'){p.exp=t.value?endDay(new Date(t.value+'T12:00:00').getTime()):null}else p[k]=v;save();return render()}
+ }});
+
+/* ===== запуск ===== */
+(function init(){
+ try{const th=localStorage.getItem('burger-theme');if(th)document.documentElement.dataset.theme=th;const z=localStorage.getItem('burger-zoom');if(z)document.documentElement.style.zoom=z}catch(e){}
+ render();
+ setInterval(()=>{if(ui.tab==='orders'&&!ui.sheet&&!document.activeElement.matches('input,textarea,select'))render()},30000);
+ if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
+ setTimeout(()=>checkUpdate(true),1500);
+})();
+</script>
+</body>
+</html>
