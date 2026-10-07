@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="app-version" content="1.1.0">
+<meta name="app-version" content="1.2.0">
 <meta name="theme-color" content="#b84d1f">
 <meta name="color-scheme" content="light dark">
 <link rel="manifest" href="manifest.webmanifest">
@@ -11,6 +11,10 @@
 <link rel="icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Burger Shop">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="application-name" content="Burger Shop">
+<meta name="format-detection" content="telephone=no">
 <title>Burger Shop</title>
 <style>
 :root{color-scheme:light;--bg:#f7f0e6;--card:#fffaf3;--card2:#f0e6d8;--tx:#2b2119;--mut:#6b5a4c;--ac:#b84d1f;--acx:#fff;--ln:#e0d2bf;--ok:#1f7a2e;--wa:#9a6200;--er:#b3261e;--in:#1d5aa6;--okb:#e0f2e1;--wab:#fbefcf;--erb:#fbe0dd;--inb:#dde9f8}
@@ -18,8 +22,10 @@
 @media (prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--bg:#17120e;--card:#241d17;--card2:#2f261e;--tx:#f4eadc;--mut:#b9a998;--ac:#e8825a;--acx:#1b0f08;--ln:#43372b;--ok:#79d17f;--wa:#ecc062;--er:#ff8a80;--in:#7db4f2;--okb:#1d3320;--wab:#3a2e12;--erb:#432120;--inb:#18304c}}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{zoom:.92}
-body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.35 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+html,body{overscroll-behavior:none}body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation;margin:0;background:var(--bg);color:var(--tx);font:14px/1.35 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:calc(72px + env(safe-area-inset-bottom))}
 button,input,select,textarea{font:inherit;color:inherit}
+input,textarea{-webkit-user-select:text;user-select:text}
+.rc{-webkit-user-select:text;user-select:text}
 button{min-height:44px;border:1px solid var(--ln);background:var(--card);border-radius:10px;padding:0 12px;cursor:pointer;font-weight:600}
 button:active{transform:scale(.98)}
 button.pri{background:var(--ac);color:var(--acx);border-color:var(--ac)}
@@ -304,7 +310,7 @@ function renderNav(){const c=counters();const T=[['orders','🧾','Заказы'
 function renderHead(){const t=startDay(Date.now());$('#hsum').innerHTML=money(sum(sold().filter(o=>o.sold>=t),oTotal));
  const dark=document.documentElement.dataset.theme==='dark'||(!document.documentElement.dataset.theme&&matchMedia('(prefers-color-scheme:dark)').matches);$('#thm').textContent=dark?'☀️':'🌙'}
 function render(){const y=scrollY;renderHead();renderNav();
- const V={orders:vOrders,sales:vSales,menu:vMenu,preps:vPreps,stock:vStock}[ui.tab];$('#main').innerHTML=V();renderSheet();scrollTo(0,y)}
+ const V={orders:vOrders,sales:vSales,menu:vMenu,preps:vPreps,stock:vStock}[ui.tab];$('#main').innerHTML=installBanner()+V();renderSheet();scrollTo(0,y)}
 
 /* --- заказы --- */
 function cartCalc(){const rem={};let s=0,n=0;
@@ -421,7 +427,7 @@ function combosV(){
  <div class="muted" style="margin:8px 0 4px">Состав:</div>${S.menu.map(m=>{const q=ui.nc.items[m.id]||0;return`<div class="row sp"><span>${esc(m.em)} ${esc(m.name)}</span><div class="step"><button data-a="ncq" data-id="${m.id}" data-v="-1">−</button><b>${q}</b><button data-a="ncq" data-id="${m.id}" data-v="1">+</button></div></div>`}).join('')}
  <button class="pri" style="width:100%;margin-top:8px" data-a="comboadd">Добавить комбо</button></div>`}
 function tools(){const sz=+(localStorage.getItem('burger-zoom')||.92);
- return `<h2>Целевой фудкост и чек</h2><div class="card"><div class="g2"><label class="f">Целевой фудкост, %<input type="number" data-c="set" data-k="fc" value="${S.set.fc}"></label><label class="f">Название на чеке<input data-c="set" data-k="shop" value="${esc(S.set.shop)}"></label><label class="f">Адрес / телефон<input data-c="set" data-k="addr" value="${esc(S.set.addr)}"></label><label class="f">Текст внизу чека<input data-c="set" data-k="foot" value="${esc(S.set.foot)}"></label></div></div>
+ return (isStandalone()?'':`<h2>Установка</h2><div class="card">${installHow()}</div>`)+`<h2>Целевой фудкост и чек</h2><div class="card"><div class="g2"><label class="f">Целевой фудкост, %<input type="number" data-c="set" data-k="fc" value="${S.set.fc}"></label><label class="f">Название на чеке<input data-c="set" data-k="shop" value="${esc(S.set.shop)}"></label><label class="f">Адрес / телефон<input data-c="set" data-k="addr" value="${esc(S.set.addr)}"></label><label class="f">Текст внизу чека<input data-c="set" data-k="foot" value="${esc(S.set.foot)}"></label></div></div>
  <h2>Размер интерфейса</h2><div class="seg">${[['Мелкий',.85],['Средний',.92],['Крупный',1]].map(z=>`<button class="${sz===z[1]?'on':''}" data-a="zoom" data-v="${z[1]}">${z[0]}</button>`).join('')}</div>
  <h2>Обновление</h2><div class="card"><div class="row sp"><span>Версия <b>${esc(document.querySelector('meta[name=app-version]').content)}</b></span><button data-a="upd">Проверить обновления</button></div></div>
  <details class="card"><summary>💾 Резервная копия</summary><div class="muted" style="margin-bottom:6px">Последняя копия: ${localStorage.getItem('burger-lastbk')||'ещё не делали'}</div>
@@ -592,6 +598,8 @@ function A(a,d,e){const id=+d.id,v=d.v;const mk=()=>S.menu.find(x=>x.id===id);
  case'wgo':{const w=ui.sheet,it=w.kind==='stock'?stockBy(w.id):S.preps.find(p=>p.id===w.id),q=Math.min(+$('#wq').value||0,it.qty),r=$('#wr').value;if(q<=0){toast('Введите количество');return}
   ui.sheet=null;act('Списано · потери записаны',()=>{it.qty=+(it.qty-q).toFixed(3);S.losses.push({id:S.seq.loss++,ts:Date.now(),name:it.name,qty:q,unit:it.unit||'порц',reason:r,sum:Math.round(q*(it.price||0))})});return}
  case'upd':return checkUpdate(false);
+ case'install':if(deferredInstall){deferredInstall.prompt();deferredInstall.userChoice.finally(()=>{deferredInstall=null;render()})}return;
+ case'noinst':try{localStorage.setItem('burger-noinst','1')}catch(x){}return render();
  case'bkdl':{const b=new Blob([bkText()],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='burger-backup-'+isoDay(Date.now())+'.json';document.body.appendChild(a);a.click();a.remove();markBackup();toast('Файл сохранён (если браузер разрешил)');return render()}
  case'bkcopy':copyText(bkText()).then(ok=>{if(ok)markBackup();toast(ok?'Копия скопирована в буфер':'Не удалось скопировать')});return;
  case'bktxtgo':return restoreData($('#bktxt').value);
@@ -616,6 +624,18 @@ document.addEventListener('change',e=>{const t=e.target;
   case'st':{const s=stockBy(id);if(k==='cat')s.cat=t.value;else if(k==='sup')s.sup=t.value?+t.value:null;else{if(k==='price'&&v!==s.price&&v>0)recordPrice(s,v);s[k]=v}save();return render()}
   case'pr':{const p=S.preps.find(x=>x.id===id);if(k==='exp'){p.exp=t.value?endDay(new Date(t.value+'T12:00:00').getTime()):null}else p[k]=v;save();return render()}
  }});
+
+/* ===== установка как приложение ===== */
+let deferredInstall=null;
+const isStandalone=()=>matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches||navigator.standalone===true;
+const isIOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+function installHow(){if(deferredInstall)return'<button class="pri" data-a="install" style="width:100%">📲 Установить приложение</button>';
+ if(isIOS())return'<div>Нажмите <b>«Поделиться»</b> <span style="font-size:18px">⎋</span> в Safari → <b>«На экран «Домой»»</b>. Приложение откроется без адресной строки.</div>';
+ return'<div>Откройте меню браузера <b>⋮</b> → <b>«Установить приложение»</b> (или «Добавить на главный экран»).</div>'}
+function installBanner(){if(isStandalone()||ui.tab==='menu')return'';try{if(localStorage.getItem('burger-noinst'))return''}catch(e){}
+ return`<div class="card" style="background:var(--inb);border-color:var(--in)"><b>📲 Установите как приложение</b><div class="muted" style="margin:4px 0 8px">Без адресной строки, с иконкой на экране и работой офлайн.</div>${installHow()}<button class="sm" style="margin-top:8px" data-a="noinst">Скрыть</button></div>`}
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;render()});
+window.addEventListener('appinstalled',()=>{deferredInstall=null;toast('Приложение установлено ✅');render()});
 
 /* ===== запуск ===== */
 (function init(){
